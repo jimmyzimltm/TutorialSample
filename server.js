@@ -98,3 +98,53 @@ app.post("/delete/:id", async (req, res) => {
 
 // Tells the app which port to run on
 app.listen(8080);
+
+
+app.get('/demo', function(req, res) {
+
+  res.render('pages/demo');
+
+});
+
+
+app.get('/specific2', async function(req, res) {
+
+    // Try-Catch for any errors
+    try {
+      // Get blog post named 2
+      const blog2 = await prisma.post.findMany({
+              where :{
+                  id:{
+                    gt: 2,
+                  } 
+                }
+      });
+
+      // Render the homepage with all the blog posts
+      await res.render('pages/home', { blogs: blog2 });
+    } catch (error) {
+      res.render('pages/home');
+      console.log(error);
+    } 
+});
+
+app.get('/search', async function(req, res) {
+
+  // Try-Catch for any errors
+  try {
+    // Get blog post named 2
+    const blogsrch = await prisma.post.findMany({
+            where :{
+                content:{
+                  contains: "happens",
+                } 
+              }
+    });
+
+    // Render the homepage with all the blog posts
+    await res.render('pages/home', { blogs: blogsrch });
+  } catch (error) {
+    res.render('pages/home');
+    console.log(error);
+  } 
+});
